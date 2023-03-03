@@ -1,0 +1,31 @@
+/*To know projected revenue of each AirBNB in CDMX*/
+select distinct id, neighbourhood, name, price, 365 - availability_365 AS booked_out365, 
+price * (365 - availability_365) AS project_rev_365
+from listings ORDER BY project_rev_365 DESC;
+
+
+SELECT neighbourhood, COUNT(*) as per_neighbourhood
+from listings 
+group by neighbourhood
+having COUNT(*) > 1
+order by per_neighbourhood DESC;
+/*  */
+
+/*To know the neighbourhood where Airbnb are more expensive */
+Select top 3 neighbourhood, AVG(price) as avg_price
+FROM dbo.listings
+Group by neighbourhood
+order by avg_price DESC;
+
+
+/*To know the neighbourhood where Airbnb are cheaper */
+Select top 3 neighbourhood, AVG(price) as avg_price
+FROM dbo.listings
+Group by neighbourhood
+order by avg_price ASC;
+
+
+Select host_id, host_name, COUNT(*) AS num_dirty_reviews from reviews
+INNER JOIN  listings ON reviews.listing_id = listing_id
+WHERE comments like '%dirty%'
+GROUP BY  host_id, host_name ORDER BY num_dirty_reviews DESC;
